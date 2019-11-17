@@ -75,14 +75,14 @@ function slice(array, from=0, to=array.length) {
     to = array.length;
   }
   if (to<0) {
-    if (-to>array.length) {
+    if (Math.abs(to)>array.length) {
       to = 0;
     } else {
       to = array.length + to;
     }
   }
   if (from<0) {
-    if (-from>array.length) {
+    if (Math.abs(from)>array.length) {
       from = 0;
     } else {
       from = array.length + from;
@@ -103,7 +103,7 @@ function slice(array, from=0, to=array.length) {
 const createProxy = (obj) => new Proxy(obj, {
   set(target, prop, value) { // для перехвата записи свойства
     if (typeof value == 'number') {
-      target[prop] = value*value;
+      target[prop] = Math.pow(value, 2);
       return true;
     } else {
       return false;
