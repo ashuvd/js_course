@@ -99,9 +99,7 @@ let deleteTextNodes = (where) => {
       textNodes.push(child);
     }
   }
-  textNodes.forEach(function(node) {
-    node.remove();
-  })
+  textNodes.forEach(node => node.remove());
 }
 
 /*
@@ -125,9 +123,7 @@ let deleteTextNodesRecursive = (where) => {
       textNodes.push(child);
     }
   }
-  textNodes.forEach(function(node) {
-    node.remove();
-  })
+  textNodes.forEach(node => node.remove());
 }
 
 /*
