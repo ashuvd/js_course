@@ -10,7 +10,10 @@
  Пример:
    createDivWithText('loftschool') // создаст элемент div, поместит в него 'loftschool' и вернет созданный элемент
  */
-function createDivWithText(text) {
+let createDivWithText = (text) => {
+  let div = document.createElement('div');
+  div.innerText = text;
+  return div;
 }
 
 /*
@@ -21,8 +24,7 @@ function createDivWithText(text) {
  Пример:
    prepend(document.querySelector('#one'), document.querySelector('#two')) // добавит элемент переданный первым аргументом в начало элемента переданного вторым аргументом
  */
-function prepend(what, where) {
-}
+let prepend = (what, where) => where.prepend(what);
 
 /*
  Задание 3:
@@ -43,7 +45,14 @@ function prepend(what, where) {
 
    findAllPSiblings(document.body) // функция должна вернуть массив с элементами div и span т.к. следующим соседом этих элементов является элемент с тегом P
  */
-function findAllPSiblings(where) {
+let findAllPSiblings = (where) => {
+  let elements = [];
+  for(let elem of where.children) {
+    if (elem.tagName === 'P' && elem !== where.firstElementChild) {
+      elements.push(elem.previousElementSibling);
+    }
+  }
+  return elements;
 }
 
 /*
@@ -63,13 +72,11 @@ function findAllPSiblings(where) {
 
    findError(document.body) // функция должна вернуть массив с элементами 'привет' и 'loftschool'
  */
-function findError(where) {
+let findError = (where) => {
     var result = [];
-
-    for (var child of where.childNodes) {
+    for (var child of where.children) {
         result.push(child.innerText);
     }
-
     return result;
 }
 
@@ -85,7 +92,16 @@ function findError(where) {
    После выполнения функции, дерево <div></div>привет<p></p>loftchool!!!
    должно быть преобразовано в <div></div><p></p>
  */
-function deleteTextNodes(where) {
+let deleteTextNodes = (where) => {
+  let textNodes = [];
+  for (let child of where.childNodes) {
+    if (child.nodeType === 3) {
+      textNodes.push(child);
+    }
+  }
+  textNodes.forEach(function(node) {
+    node.remove();
+  })
 }
 
 /*
@@ -99,7 +115,19 @@ function deleteTextNodes(where) {
    После выполнения функции, дерево <span> <div> <b>привет</b> </div> <p>loftchool</p> !!!</span>
    должно быть преобразовано в <span><div><b></b></div><p></p></span>
  */
-function deleteTextNodesRecursive(where) {
+let deleteTextNodesRecursive = (where) => {
+  let textNodes = [];
+  for (let child of where.childNodes) {
+    if (child.nodeType === 1) {
+      deleteTextNodesRecursive(child);
+    }
+    if (child.nodeType === 3) {
+      textNodes.push(child);
+    }
+  }
+  textNodes.forEach(function(node) {
+    node.remove();
+  })
 }
 
 /*
@@ -122,7 +150,35 @@ function deleteTextNodesRecursive(where) {
      texts: 3
    }
  */
-function collectDOMStat(root) {
+let collectDOMStat = (root, stats) => {
+  if (!stats) {
+    stats = {
+      tags: {},
+      classes: {},
+      texts: 0
+    }
+  }
+  for (let child of root.childNodes) {
+    if (child.nodeType === 1) {
+      if (stats.tags[child.tagName]) {
+        stats.tags[child.tagName]++;
+      } else {
+        stats.tags[child.tagName] = 1;
+      }
+      for(let classElem of child.classList) {
+        if (stats.classes[classElem]) {
+          stats.classes[classElem]++;
+        } else {
+          stats.classes[classElem] = 1;
+        }
+      }
+      collectDOMStat(child, stats);
+    }
+    if (child.nodeType === 3) {
+      stats.texts++;
+    }
+  }
+  return stats;
 }
 
 /*
@@ -157,7 +213,36 @@ function collectDOMStat(root) {
      nodes: [div]
    }
  */
-function observeChildNodes(where, fn) {
+let observeChildNodes = (where, fn) => {
+  let observer = new MutationObserver(mutations => {
+    for(let mutation of mutations) {
+      let addedNodes = [];
+      let removedNodes = [];
+      for(let node of mutation.addedNodes) {
+        // отслеживаем только узлы-элементы, другие (текстовые) пропускаем
+        if (!(node instanceof HTMLElement)) continue;
+        addedNodes.push(node);
+      }
+      for(let node of mutation.removedNodes) {
+        // отслеживаем только узлы-элементы, другие (текстовые) пропускаем
+        if (!(node instanceof HTMLElement)) continue;
+        removedNodes.push(node);
+      }
+      if (addedNodes.length > 0) {
+        fn({
+          type: 'insert',
+          nodes: addedNodes
+        })
+      }
+      if (removedNodes.length > 0) {
+        fn({
+          type: 'remove',
+          nodes: removedNodes
+        })
+      }
+    }
+  })
+  observer.observe(where, {childList: true, subtree: true});
 }
 
 export {
