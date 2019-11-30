@@ -90,9 +90,10 @@ filterInput.addEventListener('keyup', async function(e) {
     loadingBlock.style.display = "none";
     let fragment = document.createDocumentFragment();
     for (const town of towns) {
-      if (isMatching(town.name, e.target.value)) {
+      const townName = town.name;
+      if (isMatching(townName, e.target.value)) {
         let div = document.createElement('div');
-        div.textContent = town.name;
+        div.textContent = townName;
         fragment.appendChild(div);
       }
     }
