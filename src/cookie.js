@@ -69,22 +69,24 @@ function deleteCookie(name) {
 
 function addCookieInTable(cookieName, cookieValue) {
   let tr = document.createElement('tr');
-  let tdName = document.createElement('td');
-  tdName.textContent = cookieName;
-  tr.append(tdName);
-  let tdValue = document.createElement('td');
-  tdValue.textContent = cookieValue;
-  tr.append(tdValue);
-  let tdButton = document.createElement('td');
-  let button = document.createElement('button');
-  button.textContent = "Удалить";
+  let HTML =  ` 
+    <td>
+      ${cookieName}
+    </td>
+    <td>
+      ${cookieValue}
+    </td>
+    <td>
+      <button>Удалить</button>
+    </td>
+  `
+  listTable.append(tr);
+  tr.innerHTML = HTML;
+  let button = tr.querySelector('button');
   button.addEventListener('click', function() {
     tr.remove();
     deleteCookie(cookieName);
   })
-  tdButton.append(button);
-  tr.append(tdButton);
-  listTable.append(tr);
 }
 
 function showCookies(filter = "") {
@@ -102,12 +104,11 @@ function addCookie(cookieName, cookieValue) {
   let isExists = false;
   let trForDelete = null;
   for(const tr of listTable.children) {
-    for(const td of tr.children) {
-      if (td.textContent === cookieName) {
-        td.nextElementSibling.textContent = cookieValue;
-        isExists = true;
-        trForDelete = tr;
-      }
+    const tdName = tr.firstElementChild;
+    if (tdName.textContent.trim() === cookieName) {
+      tdName.nextElementSibling.textContent = cookieValue;
+      isExists = true;
+      trForDelete = tr;
     }
   }
   if(!isExists && (cookieValue.indexOf(filterNameInput.value) !== -1 || !filterNameInput.value)) {
