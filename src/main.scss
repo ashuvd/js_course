@@ -76,8 +76,10 @@ ul{
     width: 8px;
     height: 14px;
     margin-right: 8px;
+    flex-shrink: 0;
   }
   &__address{
+    text-align: left;
     font-size: 12px;
     font-weight: 300;
   }
@@ -86,6 +88,8 @@ ul{
   padding: 15px 15px 0 15px;
   display: flex;
   flex-direction: column;
+  text-align: left;
+  overflow-y: auto;
   &__item{
     margin-bottom: 25px;
     &:last-child{
@@ -159,5 +163,22 @@ ul{
     font-weight: 300;
     color: #fff;
     border-radius: 10px;
+  }
+}
+.balloon{
+  &__place{
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  &__address{
+    color: #4f4f4f;
+    margin-bottom: 10px;
+    display: block;
+  }
+  &__message{
+    margin-bottom: 100px;
+  }
+  &__datetime{
+    text-align: right;
   }
 }

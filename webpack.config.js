@@ -34,10 +34,10 @@ module.exports = {
 					'sass-loader'
 				]
 			},
-			{
-				test: /\.hbs/,
-				loader: 'handlebars-loader'
-			},
+			// {
+			// 	test: /\.hbs/,
+			// 	loader: 'handlebars-loader'
+			// },
 			{
 				test: /\.(jpe?g|png|gif|svg|eot|ttf|woff|woff2)$/i,
 				loader: 'file-loader',
@@ -63,7 +63,7 @@ module.exports = {
 		}),
 		new HtmlPlugin({
 			title: 'API Yandex Maps',
-			template: 'src/index.hbs',
+			template: 'src/index.html',
 			filename: 'index.html',
 			chunks: ['main']
 		})
