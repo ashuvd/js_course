@@ -130,8 +130,10 @@ function init() {
         },
         getCurrentDate: () => {
           let newDate = new Date();
-          let day = parseInt(newDate.getDate()) < 10 ? `0${newDate.getDate()}` : newDate.getDate();
-          let month = parseInt(newDate.getMonth() + 1) < 10 ? `0${parseInt(newDate.getMonth()) + 1}` : parseInt(newDate.getMonth()) + 1;
+          const currentDay = newDate.getDate();
+          const currentMonth = newDate.getMonth();
+          let day = parseInt(currentDay) < 10 ? `0${currentDay}` : currentDay;
+          let month = parseInt(currentMonth + 1) < 10 ? `0${parseInt(currentMonth) + 1}` : parseInt(currentMonth) + 1;
           return `${month}/${day}/${newDate.getFullYear()}`;
         },
         addReviewListener: function (e) {
